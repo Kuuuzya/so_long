@@ -6,21 +6,11 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:30:22 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/21 16:35:07 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/21 19:06:33 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-int		ft_strlen(const char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
 
 char	*ft_strrchr(const char *s, int c)
 {
@@ -37,7 +27,8 @@ char	*ft_strrchr(const char *s, int c)
 	}
 	return (NULL);
 }
-int		ft_strcmp(const char *s1, const char *s2)
+
+int	ft_strcmp(const char *s1, const char *s2)
 {
 	while (*s1 && *s2 && *s1 == *s2)
 	{

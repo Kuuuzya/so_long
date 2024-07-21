@@ -6,28 +6,36 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:30:36 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/21 16:34:03 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/21 16:56:13 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-static void ft_putchar(char c)
+static int	ft_putchar(char c)
 {
 	write(1, &c, 1);
+	return (1);
 }
 
-static void ft_putstr(char *s)
+static int	ft_putstr(char *s)
 {
+	int	count;
+
+	count = 0;
 	if (s == NULL)
-		return ;
+		return (0);
 	while (*s)
+	{
 		write(1, s++, 1);
+		count++;
+	}
+	return (count);
 }
 
-static int		ft_printstring(char *s)
+static int	ft_printstring(char *s)
 {
-	int		count;
+	int	count;
 
 	count = 0;
 	if (s == NULL)
@@ -45,8 +53,8 @@ static int	ft_parser(va_list params, const char *format, int i)
 	int	count;
 
 	count = 0;
-	if (format[i] == 'c')
-		count += ft_putchar(va_arg(params, int));
+	if (format[i] == 's')
+		count += ft_printstring(va_arg(params, char *));
 	else
 		count += ft_putchar(format[i]);
 	return (count);

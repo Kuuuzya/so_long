@@ -6,51 +6,102 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:35:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/21 16:48:12 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/21 19:12:26 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "so_long.h"
 
-void	check_extension(char *filename)
+static void	check_extension(char *filename)
 {
 	char	*extension;
 
 	extension = ft_strrchr(filename, '.');
 	if (!extension || ft_strcmp(extension, ".ber") != 0)
 	{
-		ft_printf("%s", "Error: Wrong file extension\n");
+		ft_printf("%s", "Error: Invalid file extension\n");
 		exit(1);
 	}
 }
 
-void	check_file(char *filename)
+char	**copy_old_lines(char **map, size_t size)
 {
-	int		fd;
-	char	buffer[1];
+	char	**new_map;
+	size_t	i;
 
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
+	new_map = malloc((size + 2) * sizeof(char *));
+	if (!new_map)
 	{
-		perror("Error");
+		perror("Error: Failed to allocate memory");
 		exit(1);
 	}
-	check_extension(filename);
-	if (read(fd, buffer, 1) < 1)
+	i = 0;
+	while (i < size)
 	{
-		ft_printf("%s", "Error: File is empty\n", 21);
-		exit(1);
+		new_map[i] = map[i];
+		i++;
 	}
-	close(fd);
+	if (map)
+		free(map);
+	return (new_map);
+}
+
+char	**read_file_into_array(int fd)
+{
+	char		**map;
+	char		*line;
+	size_t		len;
+	size_t		i;
+
+	map = NULL;
+	i = 0;
+	while ((line = get_next_line(fd)) != NULL && *line != '\0')
+	{
+		map = copy_old_lines(map, i);
+		map[i] = line;
+		len = ft_strlen(map[i]);
+		if (len > 0 && map[i][len - 1] == '\n')
+			map[i][len - 1] = '\0';
+		i++;
+	}
+	if (map)
+		map[i] = NULL;
+	return (map);
+}
+
+void	print_map(char **map)
+{
+	size_t	i;
+
+	i = 0;
+	while (map[i] != NULL)
+	{
+		write(1, map[i], ft_strlen(map[i]));
+		write(1, "\n", 1);
+		i++;
+	}
 }
 
 int	main(int argc, char **argv)
 {
+	int		fd;
+	char	**map;
+
 	if (argc != 2)
 	{
-		ft_printf("%s", "Error: Wrong number of arguments\n", 33);
+		ft_printf("%s", "Error: Wrong number of arguments\n");
 		exit(1);
 	}
-	check_file(argv[1]);
-	// Call your GNL function here
+	check_extension(argv[1]);
+	fd = open(argv[1], O_RDONLY);
+	if (fd < 0)
+	{
+		ft_printf("%s", "Error: Failed to open file\n");
+		exit(1);
+	}
+	map = read_file_into_array(fd);
+	close(fd);
+	if (check_map(map) == 1)
+		print_map(map);
 	return (0);
 }
