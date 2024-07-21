@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 18:32:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/21 19:18:44 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/21 20:26:56 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,19 @@
 static int	check_map_size(char **map)
 {
 	size_t	width;
+	size_t	height;
 	size_t	i;
 
 	if (!map || !*map)
 		return (0);
 	width = ft_strlen(map[0]);
+	if (width > MAX_WIDTH)
+		return (0);
+	height = 0;
+	while (map[height])
+		height++;
+	if (height > MAX_HEIGHT)
+		return (0);
 	i = 1;
 	while (map[i])
 	{

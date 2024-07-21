@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/21 19:10:00 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/21 20:26:43 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,32 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <mlx.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
 # endif
+//size of map to fit the display
+#define MAX_WIDTH 60
+#define MAX_HEIGHT 33
+
+typedef struct s_data
+{
+	void	*mlx;
+	void	*win;
+	void	*img_wall;
+	void	*img_floor;
+	void	*img_player;
+	void	*img_exit;
+	void	*img_collectible;
+	char	**map;
+	int		width;
+	int		height;
+}	t_data;
 
 void	check_file(int fd);
 int		check_map(char	**map);
+void	game_start(char **map);
 
 //libft functions and ft_printf
 int		ft_printf(const char *format, ...);

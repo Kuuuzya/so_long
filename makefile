@@ -6,27 +6,30 @@
 #    By: skuznets <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/21 15:51:49 by skuznets          #+#    #+#              #
-#    Updated: 2024/07/21 18:38:18 by skuznets         ###   ########.fr        #
+#    Updated: 2024/07/21 20:12:46 by skuznets         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = so_long
-SRCS = so_long.c ft_printf.c ft_utils.c get_next_line.c get_next_line_utils.c check_map.c
 CC = cc
-FLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
+SRCS = so_long.c ft_printf.c ft_utils.c get_next_line.c get_next_line_utils.c check_map.c game.c
 OBJS = $(SRCS:.c=.o)
-RM = rm -rf
+NAME = so_long
+MLX = -lmlx -framework OpenGL -framework AppKit
 
-$(NAME):	
-	$(CC) $(FLAGS) -o $(NAME) $(SRCS)
+all: $(NAME)
 
-all:	$(NAME)
+$(NAME): $(OBJS)
+	$(CC) ${MLX} $(CFLAGS) $(OBJS) -o $(NAME) 
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJS)
+	rm -f $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME)
+	rm -f $(NAME)
 
 re: fclean all
 
