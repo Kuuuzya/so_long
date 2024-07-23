@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/21 20:26:43 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:57:30 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <fcntl.h>
 # include <mlx.h>
 
@@ -42,6 +43,7 @@ typedef struct s_data
 
 void	check_file(int fd);
 int		check_map(char	**map);
+int		check_path_availability(char **map);
 void	game_start(char **map);
 
 //libft functions and ft_printf
@@ -53,6 +55,5 @@ size_t	ft_strlen(const char *s);
 char	*get_next_line(int fd);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char *s1, char *s2);
-char	*ft_sp(char	*st_str);
 char	*ft_substr(char *s, unsigned int start, size_t len);
 #endif

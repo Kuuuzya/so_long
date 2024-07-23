@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 18:32:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/21 20:26:56 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:53:03 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,11 @@ int	check_map(char	**map)
 	{
 		ft_printf("%s", "Error: The map must contain 1 exit, at least 1 collectible,\
 and 1 starting position\n");
+		return (0);
+	}
+	else if (check_path_availability(map) == 0)
+	{
+		ft_printf("%s", "Error: The map must is not valid. No ways to exit\n");
 		return (0);
 	}
 	else
