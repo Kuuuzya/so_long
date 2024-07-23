@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 18:32:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/23 16:53:03 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/24 02:35:51 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	check_map(char	**map)
 {
 	if (check_map_size(map) == 0)
 	{
-		ft_printf("%s", "Error: The map is not rectangular\n");
+		ft_printf("%s", "Error: The map is not rectangular or too large\n");
 		return (0);
 	}
 	else if (check_walls(map) == 0)

@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:35:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/21 19:22:34 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/24 01:19:07 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,11 @@ int	main(int argc, char **argv)
 	map = read_file_into_array(fd);
 	close(fd);
 	if (check_map(map) == 1)
+		{
+		print_map(map);
 		game_start(map);
+		}
 	else
-		ft_printf("%s", "Error: Invalid map\n");
+		ft_printf("%s", "Error: Invalid map. Fix it!\n");
 	return (0);
 }

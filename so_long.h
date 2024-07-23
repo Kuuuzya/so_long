@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/23 17:57:30 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/24 02:35:28 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,15 @@
 # include <string.h>
 # include <fcntl.h>
 # include <mlx.h>
+#include <math.h>
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
-//size of map to fit the display
+#define BUFFER_SIZE 10
 #define MAX_WIDTH 60
 #define MAX_HEIGHT 33
+#define TILE_SIZE 128
+#define WINDOW_WIDTH 1400
+#define WINDOW_HEIGHT 800
+#define MAX_TILE_SIZE 128
 
 typedef struct s_data
 {
@@ -39,10 +41,12 @@ typedef struct s_data
 	char	**map;
 	int		width;
 	int		height;
+	int		tile_size;
 }	t_data;
 
 void	check_file(int fd);
 int		check_map(char	**map);
+void	get_map_size(char **map, int *width, int *height);
 int		check_path_availability(char **map);
 void	game_start(char **map);
 

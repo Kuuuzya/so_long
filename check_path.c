@@ -6,87 +6,75 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:53:11 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/23 17:55:59 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/24 01:33:00 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void get_map_size(char **map, int *mapHeight, int *mapWidth) {
-	*mapHeight = 0;
-	*mapWidth = 0;
-	while (map[*mapHeight] != NULL) {
-		(*mapHeight)++;
-	}
-	if (*mapHeight > 0) {
-		*mapWidth = ft_strlen(map[0]);
-	}
+void	get_map_size(char **map, int *width, int *height)
+{
+	*height = 0;
+	while (map[*height])
+		(*height)++;
+	*width = 0;
+	while (map[0][*width])
+		(*width)++;
 }
 
-void floodFill(char **map, int x, int y, int mapHeight, int mapWidth) {
-	if (x < 0 || x >= mapHeight || y < 0 || y >= mapWidth || map[x][y] != '0') {
-		return;
-	}
-	map[x][y] = 'F'; // Помечаем посещенную ячейку
-
-	floodFill(map, x + 1, y, mapHeight, mapWidth); // вниз
-	floodFill(map, x - 1, y, mapHeight, mapWidth); // вверх
-	floodFill(map, x, y + 1, mapHeight, mapWidth); // вправо
-	floodFill(map, x, y - 1, mapHeight, mapWidth); // влево
-}
-
-int find_start_point(char **map, int mapHeight, int mapWidth, int *startX, int *startY) {
-	*startX = -1;
-	*startY = -1;
-	int i = 0;
-	while (i < mapHeight) {
-		int j = 0;
-		while (j < mapWidth) {
-			if (map[i][j] == 'P') {
-				*startX = i;
-				*startY = j;
-				return 1; // Найдено
-			}
-			j++;
-		}
-		i++;
-	}
-	return 0; // Не найдено
+void flood_fill(char **map, int x, int y, int *visited, int width, int height, int *reachable_c, int *reachable_e) {
+    if (x < 0 || x >= width || y < 0 || y >= height || visited[y * width + x] || map[y][x] == '1')
+        return;
+    visited[y * width + x] = 1;
+    if (map[y][x] == 'C')
+        (*reachable_c)++;
+    if (map[y][x] == 'E')
+        (*reachable_e)++;
+    flood_fill(map, x + 1, y, visited, width, height, reachable_c, reachable_e);
+    flood_fill(map, x - 1, y, visited, width, height, reachable_c, reachable_e);
+    flood_fill(map, x, y + 1, visited, width, height, reachable_c, reachable_e);
+    flood_fill(map, x, y - 1, visited, width, height, reachable_c, reachable_e);
 }
 
 int check_path_availability(char **map) {
-	int mapHeight, mapWidth;
-	int startX, startY;
+    int width, height;
+    get_map_size(map, &width, &height);
 
-	get_map_size(map, &mapHeight, &mapWidth);
-	if (!find_start_point(map, mapHeight, mapWidth, &startX, &startY)) {
-		printf("Ошибка: Начальная точка 'P' не найдена.\n");
-		return -1;
-	}
+    int *visited = (int *)malloc(width * height * sizeof(int));
+    if (!visited)
+        return 0;
 
-	floodFill(map, startX, startY, mapHeight, mapWidth);
+    for (int i = 0; i < width * height; i++)
+        visited[i] = 0;
 
-	// Проверяем, достижимы ли 'C' и 'E' после применения floodFill
-	int i = 0;
-	int isPathAvailable = 0;
-	while (i < mapHeight && !isPathAvailable) {
-		int j = 0;
-		while (j < mapWidth) {
-			if ((map[i][j] == 'C' || map[i][j] == 'E') && map[i][j] == 'F') {
-				isPathAvailable = 1;
-				break;
-			}
-			j++;
-		}
-		i++;
-	}
+    int x = -1, y = -1;
+    for (int i = 0; i < width * height; i++) {
+        if (map[i / width][i % width] == 'P') {
+            x = i % width;
+            y = i / width;
+            break;
+        }
+    }
 
-	if (isPathAvailable) {
-		printf("Путь найден.\n");
-		return (1);
-	} else {
-		printf("Путь не найден.\n");
-		return (0);
-	}
+    if (x == -1 || y == -1) {
+        free(visited);
+        return 0;
+    }
+
+    int reachable_c = 0, reachable_e = 0;
+    int total_c = 0, total_e = 0;
+
+    for (int i = 0; i < width * height; i++) {
+        if (map[i / width][i % width] == 'C')
+            total_c++;
+        if (map[i / width][i % width] == 'E')
+            total_e++;
+    }
+
+    flood_fill(map, x, y, visited, width, height, &reachable_c, &reachable_e);
+
+    free(visited);
+
+    return (reachable_c == total_c && reachable_e == total_e);
 }
 
