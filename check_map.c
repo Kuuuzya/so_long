@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 18:32:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/24 02:35:51 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 02:20:21 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static int	check_map_size(char **map)
 {
-	size_t	width;
-	size_t	height;
-	size_t	i;
+	int	width;
+	int	height;
+	int	i;
 
 	if (!map || !*map)
 		return (0);
@@ -38,9 +38,9 @@ static int	check_map_size(char **map)
 	return (1);
 }
 
-static size_t	count_char_in_map(char **map, char c)
+static int	count_char_in_map(char **map, char c)
 {
-	size_t	count;
+	int	count;
 	char	*ptr;
 
 	count = 0;
@@ -60,9 +60,9 @@ static size_t	count_char_in_map(char **map, char c)
 
 static int	check_map_content(char **map)
 {
-	size_t	exit_c;
-	size_t	collectible_c;
-	size_t	start_position_c;
+	int	exit_c;
+	int	collectible_c;
+	int	start_position_c;
 
 	exit_c = count_char_in_map(map, 'E');
 	collectible_c = count_char_in_map(map, 'C');
@@ -72,8 +72,8 @@ static int	check_map_content(char **map)
 
 int	check_walls(char **map)
 {
-	size_t	i;
-	size_t	j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (map[i])
@@ -96,23 +96,23 @@ int	check_map(char	**map)
 {
 	if (check_map_size(map) == 0)
 	{
-		ft_printf("%s", "Error: The map is not rectangular or too large\n");
+		ft_printf("%s", "Error\nThe map is not rectangular or too large (23 × 15 is max)\n");
 		return (0);
 	}
 	else if (check_walls(map) == 0)
 	{
-		ft_printf("%s", "Error: The map is not surrounded by walls\n");
+		ft_printf("%s", "Error\nThe map is not surrounded by walls\n");
 		return (0);
 	}
 	else if (check_map_content(map) == 0)
 	{
-		ft_printf("%s", "Error: The map must contain 1 exit, at least 1 collectible,\
+		ft_printf("%s", "Error\nThe map must contain 1 exit, at least 1 collectible,\
 and 1 starting position\n");
 		return (0);
 	}
 	else if (check_path_availability(map) == 0)
 	{
-		ft_printf("%s", "Error: The map must is not valid. No ways to exit\n");
+		ft_printf("%s", "Error\nThe map must is not valid. No ways to exit\n");
 		return (0);
 	}
 	else

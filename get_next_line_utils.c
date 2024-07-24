@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 19:51:59 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/21 17:17:23 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 02:25:08 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (str);
 }
 
-size_t	ft_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (s[i])
@@ -67,11 +67,11 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_substr(char *s, unsigned int start, size_t len)
+char	*ft_substr(char *s, int start, int len)
 {
 	char		*str;
-	size_t		i;
-	size_t		k;
+	int		i;
+	int		k;
 
 	if (!s)
 		return (0);

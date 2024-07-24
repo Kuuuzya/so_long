@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:35:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/24 01:19:07 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 02:21:10 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,20 @@ static void	check_extension(char *filename)
 	extension = ft_strrchr(filename, '.');
 	if (!extension || ft_strcmp(extension, ".ber") != 0)
 	{
-		ft_printf("%s", "Error: Invalid file extension\n");
+		ft_printf("%s", "Error\nInvalid file extension\n");
 		exit(1);
 	}
 }
 
-char	**copy_old_lines(char **map, size_t size)
+char	**copy_old_lines(char **map, int size)
 {
 	char	**new_map;
-	size_t	i;
+	int	i;
 
 	new_map = malloc((size + 2) * sizeof(char *));
 	if (!new_map)
 	{
-		perror("Error: Failed to allocate memory");
+		perror("Error\nFailed to allocate memory");
 		exit(1);
 	}
 	i = 0;
@@ -48,10 +48,10 @@ char	**copy_old_lines(char **map, size_t size)
 
 char	**read_file_into_array(int fd)
 {
-	char		**map;
-	char		*line;
-	size_t		len;
-	size_t		i;
+	char	**map;
+	char	*line;
+	int		len;
+	int		i;
 
 	map = NULL;
 	i = 0;
@@ -71,7 +71,7 @@ char	**read_file_into_array(int fd)
 
 void	print_map(char **map)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (map[i] != NULL)
@@ -89,24 +89,22 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		ft_printf("%s", "Error: Wrong number of arguments\n");
+		ft_printf("%s", "Error\nWrong number of arguments. Use ./so_long map_name.ber\n");
 		exit(1);
 	}
 	check_extension(argv[1]);
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 	{
-		ft_printf("%s", "Error: Failed to open file\n");
+		ft_printf("%s", "Error\nFailed to open file\n");
 		exit(1);
 	}
 	map = read_file_into_array(fd);
 	close(fd);
 	if (check_map(map) == 1)
 		{
-		print_map(map);
+		ft_printf("%s", "Map is OK\n");
 		game_start(map);
 		}
-	else
-		ft_printf("%s", "Error: Invalid map. Fix it!\n");
 	return (0);
 }

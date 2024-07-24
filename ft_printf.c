@@ -6,32 +6,11 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:30:36 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/23 18:25:00 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 02:24:32 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-static int	ft_putchar(char c)
-{
-	write(1, &c, 1);
-	return (1);
-}
-
-static int	ft_putstr(char *s)
-{
-	int	count;
-
-	count = 0;
-	if (s == NULL)
-		return (0);
-	while (*s)
-	{
-		write(1, s++, 1);
-		count++;
-	}
-	return (count);
-}
 
 static int	ft_printstring(char *s)
 {
@@ -48,12 +27,32 @@ static int	ft_printstring(char *s)
 	return (count);
 }
 
+
+int ft_printnumber(int n)
+{
+	if (n < 0)
+	{
+		ft_putchar('-');
+		n = -n;
+	}
+	if (n > 9)
+	{
+		ft_printnumber(n / 10);
+		ft_printnumber(n % 10);
+	}
+	else
+		ft_putchar(n + '0');
+	return (0);
+}
+
 static int	ft_parser(va_list params, const char *format, int i)
 {
 	int	count;
 
 	count = 0;
-	if (format[i] == 's')
+	if (format[i] == 'd' || format[i] == 'i')
+		count += ft_printnumber(va_arg(params, int));
+	else if (format[i] == 's')
 		count += ft_printstring(va_arg(params, char *));
 	else
 		count += ft_putchar(format[i]);
