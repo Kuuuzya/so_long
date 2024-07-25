@@ -6,13 +6,13 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 18:32:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 13:39:42 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:02:48 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-static int	check_map_size(char **map)
+int	check_map_size(char **map)
 {
 	int	width;
 	int	height;
@@ -58,7 +58,7 @@ static int	count_char_in_map(char **map, char c)
 	return (count);
 }
 
-static int	check_map_content(char **map)
+int	check_map_content(char **map)
 {
 	int	exit_c;
 	int	collectible_c;

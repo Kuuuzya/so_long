@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:30:22 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 13:52:17 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:03:58 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,18 @@ int	ft_putstr(char *s)
 		count++;
 	}
 	return (count);
+}
+
+int ft_strcpy(char *dst, const char *src)
+{
+	int i;
+
+	i = 0;
+	while (src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 13:59:44 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:04:13 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,12 @@ typedef struct	s_flood_fill
 	int	*reachable_e;
 }	t_flood_fill;
 
-void	check_file(int fd);
+void	check_file(int	fd);
 int		check_map(char	**map);
-
-int		check_path_availability(char **map);
+int		check_map_content(char	**map);
+int		check_map_size(char **map);
+int		check_walls(char **map);
+int		check_path_availability(char	**map, int	result);
 void	free_map(char **map);
 void	game_start(char **map);
 
@@ -71,6 +73,7 @@ int		ft_strlen(const char *s);
 int		ft_putchar(char c);
 int		ft_putstr(char *s);
 int		ft_printnumber(int n);
+int		ft_strcpy(char *dst, const char *src);
 //check path utils
 int		*init_visited(int width, int height);
 void	count_items(char **map, int *total_c, int *total_e);

@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:01:34 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 14:09:49 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:22:58 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	initialize_and_check_start_point(char **map, int **x, int **y)
 	*y = (int *)malloc(sizeof(int));
 	if (!(*x) || !(*y))
 		return (0);
-	find_starting_point(map, width, height, *x, *y);
+	find_starting_point(map, *x, *y);
 	if (**x == -1 || **y == -1)
 	{
 		free(*x);
@@ -74,7 +74,7 @@ int	check_path_availability(char **map, int result)
 		free_resources(x, y, &ff);
 		return (0);
 	}
-	count_items(map, width, height, ff.reachable_c, ff.reachable_e);
+	count_items(map, ff.reachable_c, ff.reachable_e);
 	flood_fill(map, *x, *y, &ff);
 	result = (*ff.reachable_c == *ff.reachable_c && \
 *ff.reachable_e == *ff.reachable_e);
