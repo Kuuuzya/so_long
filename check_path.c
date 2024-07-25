@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:01:34 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 14:22:58 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:30:57 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	check_path_availability(char **map, int result)
 
 	if (!initialize_and_check_start_point(map, &x, &y))
 		return (0);
+	printf("check_path_availability: checking map path availability\n");
 	get_map_size(map, &width, &height);
 	ff = init_flood_fill(width, height);
 	if (!ff.visited || !ff.reachable_c || !ff.reachable_e)

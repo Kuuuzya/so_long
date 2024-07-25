@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 19:31:49 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 14:41:38 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:26:10 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void draw_map(t_data *data)
 		}
 		y++;
 	}
-	sprintf(move_str, "Moves: %d", data->moves);
+	snprintf(move_str, sizeof(move_str), "Moves: %d", data->moves);
 	mlx_string_put(data->mlx, data->win, 10, 10, 0xFFFFFF, move_str);
 }
 

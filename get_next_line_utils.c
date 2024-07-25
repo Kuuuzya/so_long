@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 19:51:59 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 13:52:41 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:39:23 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[k])
 		str[i++] = s2[k++];
 	str[i] = '\0';
-	free(s1);
+	if (s1)
+		free(s1);
 	return (str);
 }
 
