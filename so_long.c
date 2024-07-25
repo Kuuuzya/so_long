@@ -6,18 +6,19 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:35:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 19:16:02 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:22:44 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-#include "so_long.h"
-
-void free_map(char **map) {
-    if (!map) return;
-    for (int i = 0; map[i] != NULL; i++) {
+void free_map(char **map)
+{
+    int i = 0;
+    while (map[i])
+    {
         free(map[i]);
+        i++;
     }
     free(map);
 }
@@ -111,28 +112,29 @@ int main(int argc, char **argv) {
 
     if (argc != 2) {
         printf("%s", "Error\nWrong number of arguments. Use ./so_long map_name.ber\n");
+		system("leaks so_long");
         exit(1);
     }
     check_extension(argv[1]);
     fd = open(argv[1], O_RDONLY);
     if (fd < 0) {
         printf("%s", "Error\nFailed to open file\n");
+		system("leaks so_long");
         exit(1);
     }
     printf("start reading\n\n");
     map = read_file_into_array(fd, &map_size);
     close(fd);
-    printf("start checking\n\n");
     if (check_map(map) == 1) {
         printf("%s", "Map is OK\n");
         print_map(map);
         data.map = map; // Инициализация карты в структуре данных
         game_start(&data); // Передача структуры данных в game_start
-    } else {
+		printf("ВЕРНУЛИСЬ!\n");
+    } else 
         printf("%s", "Error\nInvalid map\n");
-    }
-    // Освобождение карты в случае неудачи
-    if (map) 
-        free_map(map); 
-    return 0;
+	if (map)
+        free_map(map);
+	system("leaks so_long");
+	return 0;
 }

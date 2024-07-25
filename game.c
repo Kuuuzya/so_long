@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 19:31:49 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 19:16:56 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:38:53 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,8 @@ void end_game(t_data *data, const char *message)
         mlx_destroy_image(data->mlx, data->enemy_img);
     if (data->win)
         mlx_destroy_window(data->mlx, data->win);
-    if (data->map)
-        free_map(data->map); // Освобождение памяти для карты
-    exit(0);
+	system("leaks so_long");
+    data->game_over = 1;  // Устанавливаем флаг завершения игры
 }
 
 void animate_player(t_data *data)
@@ -313,8 +312,11 @@ int key_hook(int keycode, t_data *data)
 
 int game_loop(t_data *data)
 {
-	static int player_animation_counter = 0;
+	static int player_animation_counter;
 
+	player_animation_counter = 0;
+	if (data->game_over)
+        return (1);
 	if (player_animation_counter++ >= 10)
 	{
 		animate_player(data);

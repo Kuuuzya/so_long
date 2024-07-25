@@ -6,34 +6,37 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 19:50:31 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 15:39:41 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:20:45 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-char	*ft_read(int fd, char *buf, char *str)
+char *ft_read(int fd, char *buf, char *str)
 {
-	int	r;
+    int r;
+    char *temp;
 
-	r = 1;
-	while (ft_strchr(str, '\n') == 0 && r != 0)
-	{
-		r = read(fd, buf, BUFFER_SIZE);
-		if (r < 0)
-		{
-			free(buf);
-			free(str);
-			return (0);
-		}
-		buf[r] = '\0';
-		if (!str)
-			str = ft_substr(buf, 0, r);
-		else
-			str = ft_strjoin(str, buf);
-	}
-	free(buf);
-	return (str);
+    r = 1;
+    while (ft_strchr(str, '\n') == 0 && r != 0)
+    {
+        r = read(fd, buf, BUFFER_SIZE);
+        if (r < 0)
+        {
+            free(str);
+            str = NULL;  // Обнуляем указатель после освобождения
+            return (NULL);
+        }
+        buf[r] = '\0';
+        if (!str)
+            str = ft_substr(buf, 0, r);
+        else
+        {
+            temp = ft_strjoin(str, buf);
+            str = temp; // Обновляем str только если ft_strjoin не вернул NULL
+        }
+    }
+    return (str);
 }
 
 char	*ft_remain(char	*str)
@@ -46,7 +49,8 @@ char	*ft_remain(char	*str)
 		i++;
 	i++;
 	rem = ft_substr(str, i, ft_strlen(str));
-	free(str);
+	if (str)
+		free(str);
 	return (rem);
 }
 
@@ -63,25 +67,28 @@ char	*ft_line(char *str)
 	return (line);
 }
 
-char	*get_next_line(int fd)
+char *get_next_line(int fd)
 {
-	char			*current_line;
-	char			*buf;
-	static char		*str;
+    char *current_line;
+    char *buf;
+    static char *str;
 
-	if (BUFFER_SIZE < 1 || fd < 0)
-		return (0);
-	buf = malloc(BUFFER_SIZE + 1);
-	if (!buf)
-		return (0);
-	str = ft_read(fd, buf, str);
-	if (!str || str[0] == '\0')
-	{
-		free(str);
-		str = 0;
-		return (NULL);
-	}
-	current_line = ft_line(str);
-	str = ft_remain(str);
-	return (current_line);
+    if (BUFFER_SIZE < 1 || fd < 0)
+        return (0);
+    buf = malloc(BUFFER_SIZE + 1);
+    if (!buf)
+        return (0);
+    str = ft_read(fd, buf, str);
+    free(buf);  // Освобождение памяти для buf после чтения
+    if (!str || str[0] == '\0')
+    {
+        if (str) {
+            free(str);
+            str = NULL; // Обнуляем указатель после освобождения
+        }
+        return (NULL);
+    }
+    current_line = ft_line(str);
+    str = ft_remain(str);
+    return (current_line);
 }

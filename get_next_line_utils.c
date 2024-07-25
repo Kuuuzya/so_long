@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 19:51:59 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 15:39:23 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:08:45 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,27 @@ char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char *ft_strjoin(char *s1, char *s2)
 {
-	int		i;
+    int		i;
 	int		k;
-	char	*str;
+    char	*str;
 
-	if (!s1)
+    if (!s1) {
+        s1 = malloc(sizeof(char));
+        if (!s1) return NULL;
+        s1[0] = '\0';
+    }
+    if (s2 == NULL) {
+        free(s1);
+        return NULL;
+    }
+    str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1); // Удален лишний +1
+    if (!str)
 	{
-		s1 = (char *)malloc(sizeof(char) * 1);
-		s1[0] = '\0';
-	}
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	str = malloc(ft_strlen((char *)s1) + ft_strlen((char *)s2) + 2);
-	if (!str)
-		return (0);
+        free(s1);  // Утечка исправлена
+        return NULL;
+    }
 	k = 0;
 	i = 0;
 	while (s1[k])

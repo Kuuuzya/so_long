@@ -6,12 +6,13 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 18:32:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 16:30:34 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:41:15 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 #include "so_long.h"
+
 int check_map_size(char **map)
 {
     int width;
