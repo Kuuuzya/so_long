@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:35:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 02:21:10 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:38:42 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int	main(int argc, char **argv)
 	if (check_map(map) == 1)
 		{
 		ft_printf("%s", "Map is OK\n");
+		system("leaks so_long");
 		game_start(map);
 		}
 	return (0);

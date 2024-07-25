@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 02:25:31 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:44:17 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	*ft_strrchr(const char *s, int c);
 int		ft_strlen(const char *s);
 int		ft_putchar(char c);
 int		ft_putstr(char *s);
+int		ft_printnumber(int n);
 //get next line utils
 char	*get_next_line(int fd);
 char	*ft_strchr(const char *s, int c);

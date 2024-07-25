@@ -6,10 +6,15 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 19:31:49 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 02:42:43 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:44:40 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "so_long.h"
+
+#include <stdlib.h>
+#include <unistd.h>
+#include "mlx.h"
 #include "so_long.h"
 
 int	load_textures(t_data *data)
@@ -65,8 +70,13 @@ void	draw_map(t_data *data)
 		}
 		y++;
 	}
-	sprintf(move_str, "Moves: %d", data->moves);
-	mlx_string_put(data->mlx, data->win, 10, 10, 0xFFFFFF, move_str);
+	// Выводим слово "Moves: "
+	mlx_string_put(data->mlx, data->win, 10, 10, 0xFFFFFF, "Moves: ");
+	
+	// Преобразуем количество ходов в строку и выводим
+	int move_len = data->moves;
+	ft_printnumber(move_len);
+	mlx_string_put(data->mlx, data->win, 70, 10, 0xFFFFFF, move_str);
 }
 
 int	find_player(t_data *data, int *x, int *y)
@@ -150,61 +160,68 @@ void	move_player(t_data *data, int new_x, int new_y)
 	}
 }
 
-void	move_enemy_towards_player(t_data *data, int ex, int ey, int px, int py)
+void move_enemy_random(t_data *data, int ex, int ey)
 {
-	int new_x = ex;
-	int new_y = ey;
+	int directions[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+	int valid_directions[4][2];
+	int valid_count = 0;
 
-	if (abs(px - ex) > abs(py - ey))
+	for (int i = 0; i < 4; i++)
 	{
-		if (px > ex)
-			new_x++;
-		else if (px < ex)
-			new_x--;
-	}
-	else
-	{
-		if (py > ey)
-			new_y++;
-		else if (py < ey)
-			new_y--;
+		int new_x = ex + directions[i][0];
+		int new_y = ey + directions[i][1];
+
+		if (new_x >= 0 && new_x < data->width / TILE_SIZE && new_y >= 0 && new_y < data->height / TILE_SIZE)
+		{
+			if (data->map[new_y][new_x] != '1' && data->map[new_y][new_x] != 'E' && data->map[new_y][new_x] != 'X' && data->map[new_y][new_x] != 'C')
+			{
+				valid_directions[valid_count][0] = new_x;
+				valid_directions[valid_count][1] = new_y;
+				valid_count++;
+			}
+		}
 	}
 
-	if (new_x >= 0 && new_x < data->width / TILE_SIZE &&
-		new_y >= 0 && new_y < data->height / TILE_SIZE &&
-		(data->map[new_y][new_x] == '0' || data->map[new_y][new_x] == 'P'))
+	if (valid_count > 0)
 	{
+		int random_index = rand() % valid_count;
+		int new_x = valid_directions[random_index][0];
+		int new_y = valid_directions[random_index][1];
+
 		if (data->map[new_y][new_x] == 'P')
 			end_game(data, "Вы проиграли");
-		data->map[ey][ex] = '0';
+
+		// Перемещаем врага
 		data->map[new_y][new_x] = 'X';
+		data->map[ey][ex] = '0';
 	}
 }
 
-void	move_enemies(t_data *data)
+void move_enemies(t_data *data)
 {
-	int x;
-	int y;
-	int px;
-	int py;
+	int x, y;
+	int enemy_positions[data->height * data->width][2];
+	int enemy_count = 0;
 
-	find_player(data, &px, &py);
-
-	y = 0;
-	while (y < data->height / TILE_SIZE)
+	for (y = 0; y < data->height / TILE_SIZE; y++)
 	{
-		x = 0;
-		while (x < data->width / TILE_SIZE)
+		for (x = 0; x < data->width / TILE_SIZE; x++)
 		{
 			if (data->map[y][x] == 'X')
 			{
-				move_enemy_towards_player(data, x, y, px, py);
+				enemy_positions[enemy_count][0] = x;
+				enemy_positions[enemy_count][1] = y;
+				enemy_count++;
 			}
-			x++;
 		}
-		y++;
 	}
-	draw_map(data); // Обновляем карту после движения врагов
+
+	for (int i = 0; i < enemy_count; i++)
+	{
+		int ex = enemy_positions[i][0];
+		int ey = enemy_positions[i][1];
+		move_enemy_random(data, ex, ey);
+	}
 }
 
 int	key_hook(int keycode, t_data *data)
@@ -239,12 +256,12 @@ int	close_game(t_data *data)
 
 int	game_loop(t_data *data)
 {
-	static int animation_counter = 0;
+	static int player_animation_counter = 0;
 
-	if (animation_counter++ >= 100)
+	if (player_animation_counter++ >= 10)
 	{
 		animate_player(data);
-		animation_counter = 0;
+		player_animation_counter = 0;
 	}
 
 	draw_map(data);
@@ -272,4 +289,3 @@ void	game_start(char **map)
 	mlx_loop_hook(data.mlx, game_loop, &data);
 	mlx_loop(data.mlx);
 }
-
