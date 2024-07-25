@@ -5,76 +5,79 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/25 00:10:00 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 11:31:46 by skuznets         ###   ########.fr       */
+/*   Created: 2024/07/25 14:01:34 by skuznets          #+#    #+#             */
+/*   Updated: 2024/07/25 14:09:49 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	get_map_size(char **map, int *width, int *height)
+t_flood_fill	init_flood_fill(int width, int height)
 {
-	*height = 0;
-	while (map[*height])
-		(*height)++;
-	*width = 0;
-	while (map[0][*width])
-		(*width)++;
+	t_flood_fill	ff;
+
+	ff.visited = init_visited(width, height);
+	ff.width = width;
+	ff.height = height;
+	ff.reachable_c = (int *)malloc(sizeof(int));
+	ff.reachable_e = (int *)malloc(sizeof(int));
+	if (ff.reachable_c)
+		*ff.reachable_c = 0;
+	if (ff.reachable_e)
+		*ff.reachable_e = 0;
+	return (ff);
 }
 
-void flood_fill(char **map, int x, int y, int *visited, int width, int height, int *reachable_c, int *reachable_e) {
-    if (x < 0 || x >= width || y < 0 || y >= height || visited[y * width + x] || map[y][x] == '1' || map[y][x] == 'X')
-        return;
-    visited[y * width + x] = 1;
-    if (map[y][x] == 'C')
-        (*reachable_c)++;
-    if (map[y][x] == 'E')
-        (*reachable_e)++;
-    flood_fill(map, x + 1, y, visited, width, height, reachable_c, reachable_e);
-    flood_fill(map, x - 1, y, visited, width, height, reachable_c, reachable_e);
-    flood_fill(map, x, y + 1, visited, width, height, reachable_c, reachable_e);
-    flood_fill(map, x, y - 1, visited, width, height, reachable_c, reachable_e);
+void	free_resources(int *x, int *y, t_flood_fill *ff)
+{
+	free(ff->visited);
+	free(ff->reachable_c);
+	free(ff->reachable_e);
+	free(x);
+	free(y);
 }
 
-int check_path_availability(char **map) {
-	int width, height;
+int	initialize_and_check_start_point(char **map, int **x, int **y)
+{
+	int	width;
+	int	height;
+
 	get_map_size(map, &width, &height);
-
-	int *visited = (int *)malloc(width * height * sizeof(int));
-	if (!visited)
-		return 0;
-
-	for (int i = 0; i < width * height; i++)
-		visited[i] = 0;
-
-	int x = -1, y = -1;
-	for (int i = 0; i < width * height; i++) {
-		if (map[i / width][i % width] == 'P') {
-			x = i % width;
-			y = i / width;
-			break;
-		}
+	*x = (int *)malloc(sizeof(int));
+	*y = (int *)malloc(sizeof(int));
+	if (!(*x) || !(*y))
+		return (0);
+	find_starting_point(map, width, height, *x, *y);
+	if (**x == -1 || **y == -1)
+	{
+		free(*x);
+		free(*y);
+		return (0);
 	}
-
-	if (x == -1 || y == -1) {
-		free(visited);
-		return 0;
-	}
-
-	int reachable_c = 0, reachable_e = 0;
-	int total_c = 0, total_e = 0;
-
-	for (int i = 0; i < width * height; i++) {
-		if (map[i / width][i % width] == 'C')
-			total_c++;
-		if (map[i / width][i % width] == 'E')
-			total_e++;
-	}
-
-	flood_fill(map, x, y, visited, width, height, &reachable_c, &reachable_e);
-
-	free(visited);
-
-	return (reachable_c == total_c && reachable_e == total_e);
+	return (1);
 }
 
+int	check_path_availability(char **map, int result)
+{
+	int				*x;
+	int				*y;
+	int				width;
+	int				height;
+	t_flood_fill	ff;
+
+	if (!initialize_and_check_start_point(map, &x, &y))
+		return (0);
+	get_map_size(map, &width, &height);
+	ff = init_flood_fill(width, height);
+	if (!ff.visited || !ff.reachable_c || !ff.reachable_e)
+	{
+		free_resources(x, y, &ff);
+		return (0);
+	}
+	count_items(map, width, height, ff.reachable_c, ff.reachable_e);
+	flood_fill(map, *x, *y, &ff);
+	result = (*ff.reachable_c == *ff.reachable_c && \
+*ff.reachable_e == *ff.reachable_e);
+	free_resources(x, y, &ff);
+	return (result);
+}

@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 19:51:59 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 02:25:08 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:52:41 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ft_strlen(const char *s)
 
 char	*ft_substr(char *s, int start, int len)
 {
-	char		*str;
+	char	*str;
 	int		i;
 	int		k;
 

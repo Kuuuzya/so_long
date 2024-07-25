@@ -6,12 +6,11 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 18:32:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 13:04:21 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:39:42 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
 
 static int	check_map_size(char **map)
 {
@@ -41,7 +40,7 @@ static int	check_map_size(char **map)
 
 static int	count_char_in_map(char **map, char c)
 {
-	int	count;
+	int		count;
 	char	*ptr;
 
 	count = 0;
@@ -91,48 +90,4 @@ int	check_walls(char **map)
 		i++;
 	}
 	return (1);
-}
-
-void	free_map(char **map)
-{
-	int	i;
-
-	i = 0;
-	while (map[i])
-	{
-		free(map[i]);
-		i++;
-	}
-	free(map);
-}
-
-int	check_map(char	**map)
-{
-	if (check_map_size(map) == 0)
-	{
-		ft_printf("%s", "Error\nThe map is not rectangular or too large (23 × 15 is max)\n");
-		free_map(map);
-		return (0);
-	}
-	else if (check_walls(map) == 0)
-	{
-		ft_printf("%s", "Error\nThe map is not surrounded by walls\n");
-		free_map(map);
-		return (0);
-	}
-	else if (check_map_content(map) == 0)
-	{
-		ft_printf("%s", "Error\nThe map must contain 1 exit, at least 1 collectible,\
-and 1 starting position\n");
-		free_map(map);
-		return (0);
-	}
-	else if (check_path_availability(map) == 0)
-	{
-		ft_printf("%s", "Error\nThe map is not valid. No ways to exit\n");
-		free_map(map);
-		return (0);
-	}
-	else
-		return (1);
 }

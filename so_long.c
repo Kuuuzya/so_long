@@ -6,11 +6,12 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:35:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 12:37:26 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:27:11 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
 
 static void	check_extension(char *filename)
 {
@@ -48,7 +49,7 @@ char	**copy_old_lines(char **map, int size)
 	return (new_map);
 }
 
-char	**read_file_into_array(int fd)
+char	**read_file_into_array(int fd, int *size)
 {
 	char	**map;
 	char	*line;
@@ -68,6 +69,7 @@ char	**read_file_into_array(int fd)
 	}
 	if (map)
 		map[i] = NULL;
+	*size = i;
 	return (map);
 }
 
@@ -84,10 +86,11 @@ void	print_map(char **map)
 	}
 }
 
-int	tmain(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	int		fd;
 	char	**map;
+	int		map_size;
 
 	if (argc != 2)
 	{
@@ -103,21 +106,13 @@ int	tmain(int argc, char **argv)
 		system("leaks so_long");
 		exit(1);
 	}
-	map = read_file_into_array(fd);
+	map = read_file_into_array(fd, &map_size);
 	close(fd);
 	if (check_map(map) == 1)
-		{
+	{
 		ft_printf("%s", "Map is OK\n");
-		// system("leaks so_long");
 		game_start(map);
-		}
-	return (0);
-}
-
-
-int main(int argc, char **argv)
-{
-	tmain(argc, argv);
-	system("leaks so_long");
+	}
+	free_map(map); // освобождение памяти карты после использования
 	return (0);
 }

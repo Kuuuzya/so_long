@@ -6,16 +6,16 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 19:31:49 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 13:17:32 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:31:57 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	load_textures(t_data *data)
+int load_textures(t_data *data)
 {
-	int	img_width;
-	int	img_height;
+	int img_width;
+	int img_height;
 
 	img_width = TILE_SIZE;
 	img_height = TILE_SIZE;
@@ -35,7 +35,7 @@ int	load_textures(t_data *data)
 	return (1);
 }
 
-void	draw_map(t_data *data)
+void draw_map(t_data *data)
 {
 	int x;
 	int y;
@@ -69,7 +69,7 @@ void	draw_map(t_data *data)
 	mlx_string_put(data->mlx, data->win, 10, 10, 0xFFFFFF, move_str);
 }
 
-int	find_player(t_data *data, int *x, int *y)
+int find_player(t_data *data, int *x, int *y)
 {
 	int i;
 	int j;
@@ -93,7 +93,7 @@ int	find_player(t_data *data, int *x, int *y)
 	return (0);
 }
 
-int	check_win(t_data *data)
+int check_win(t_data *data)
 {
 	int i;
 	int j;
@@ -113,58 +113,74 @@ int	check_win(t_data *data)
 	return (1);
 }
 
-void	end_game(t_data *data, const char *message)
+void end_game(t_data *data, const char *message)
 {
 	ft_printf("%s\n", message);
-	mlx_destroy_window(data->mlx, data->win);
+	// Освобождение ресурсов
+	if (data->wall_img)
+		mlx_destroy_image(data->mlx, data->wall_img);
+	if (data->floor_img)
+		mlx_destroy_image(data->mlx, data->floor_img);
+	if (data->player_img[0])
+		mlx_destroy_image(data->mlx, data->player_img[0]);
+	if (data->player_img[1])
+		mlx_destroy_image(data->mlx, data->player_img[1]);
+	if (data->exit_img)
+		mlx_destroy_image(data->mlx, data->exit_img);
+	if (data->collectible_img)
+		mlx_destroy_image(data->mlx, data->collectible_img);
+	if (data->enemy_img)
+		mlx_destroy_image(data->mlx, data->enemy_img);
+	if (data->win)
+		mlx_destroy_window(data->mlx, data->win);
 	system("leaks so_long");
 	exit(0);
 }
 
-void	animate_player(t_data *data)
+void animate_player(t_data *data)
 {
 	data->player_frame = (data->player_frame + 1) % 2;
 }
 
 void move_player(t_data *data, int new_x, int new_y)
 {
-    int x;
-    int y;
+	int x;
+	int y;
 
-    if (DEBUG)
-        printf("Entering move_player\n");
+	if (DEBUG)
+		printf("Entering move_player\n");
 
-    find_player(data, &x, &y);
+	find_player(data, &x, &y);
 
-    if (DEBUG)
-    {
-        printf("Player position: (%d, %d)\n", x, y);
-        printf("New position: (%d, %d)\n", new_x, new_y);
-    }
+	if (DEBUG)
+	{
+		printf("Player position: (%d, %d)\n", x, y);
+		printf("New position: (%d, %d)\n", new_x, new_y);
+	}
 
-    if (data->map[new_y][new_x] != '1' && data->map[new_y][new_x] != 'E')
-    {
-        if (data->map[new_y][new_x] == 'C')
-            data->map[new_y][new_x] = '0';
-        else if (data->map[new_y][new_x] == 'X')
-            end_game(data, "Вы проиграли");
+	if (data->map[new_y][new_x] != '1' && data->map[new_y][new_x] != 'E')
+	{
+		if (data->map[new_y][new_x] == 'C')
+			data->map[new_y][new_x] = '0';
+		else if (data->map[new_y][new_x] == 'X')
+			end_game(data, "Вы проиграли");
 
-        data->map[y][x] = '0';
-        data->map[new_y][new_x] = 'P';
-        data->moves++;
+		data->map[y][x] = '0';
+		data->map[new_y][new_x] = 'P';
+		data->moves++;
 
-        if (DEBUG)
-            printf("Number of moves: %d\n", data->moves);
+		if (DEBUG)
+			printf("Number of moves: %d\n", data->moves);
 
-        animate_player(data);
-    }
-    else if (data->map[new_y][new_x] == 'E' && check_win(data))
-    {
-        end_game(data, "Вы выиграли!");
-    }
+		animate_player(data);
+	}
+	else if (data->map[new_y][new_x] == 'E' && check_win(data))
+	{
+		end_game(data, "Вы выиграли!");
+	}
 
-    if (DEBUG)
-        printf("Exiting move_player\n");
+	if (DEBUG)
+		printf("Exiting move_player\n");
 }
 
 void move_enemy_random(t_data *data, int ex, int ey)
@@ -207,73 +223,66 @@ void move_enemy_random(t_data *data, int ex, int ey)
 
 void move_enemies(t_data *data)
 {
-    int x, y;
-    int **enemy_positions = NULL;
-    int enemy_count = 0;
+	int x, y;
+	int **enemy_positions = NULL;
+	int enemy_count = 0;
 
-    if (DEBUG)
-        printf("Entering move_enemies\n");
+	if (DEBUG)
+		printf("Entering move_enemies\n");
 
-    // Проверяем, изменилось ли положение врагов
-    if (data->enemies_updated)
-    {
-        // Динамическое выделение памяти для массива позиций врагов
-        if (enemy_positions != NULL)
-        {
-            for (int i = 0; i < enemy_count; i++)
-            {
-                free(enemy_positions[i]);
-            }
-            free(enemy_positions);
-        }
+	// Динамическое выделение памяти для массива позиций врагов
+	enemy_positions = (int **)malloc(data->height * data->width * sizeof(int *));
+	if (!enemy_positions)
+	{
+		printf("Memory allocation failed for enemy_positions\n");
+		return;
+	}
 
-        enemy_positions = (int **)malloc(data->height * data->width * sizeof(int *));
-        if (!enemy_positions)
-        {
-            printf("Memory allocation failed for enemy_positions\n");
-            return;
-        }
+	enemy_count = 0;
+	for (y = 0; y < data->height / TILE_SIZE; y++)
+	{
+		for (x = 0; x < data->width / TILE_SIZE; x++)
+		{
+			if (data->map[y][x] == 'X')
+			{
+				enemy_positions[enemy_count] = (int *)malloc(2 * sizeof(int));
+				if (!enemy_positions[enemy_count])
+				{
+					printf("Memory allocation failed for enemy_positions[%d]\n", enemy_count);
+					// Освобождение уже выделенной памяти перед выходом
+					for (int i = 0; i < enemy_count; i++)
+					{
+						free(enemy_positions[i]);
+					}
+					free(enemy_positions);
+					return;
+				}
+				enemy_positions[enemy_count][0] = x;
+				enemy_positions[enemy_count][1] = y;
+				enemy_count++;
+			}
+		}
+	}
 
-        enemy_count = 0;
-        for (y = 0; y < data->height / TILE_SIZE; y++)
-        {
-            for (x = 0; x < data->width / TILE_SIZE; x++)
-            {
-                if (data->map[y][x] == 'X')
-                {
-                    enemy_positions[enemy_count] = (int *)malloc(2 * sizeof(int));
-                    if (!enemy_positions[enemy_count])
-                    {
-                        printf("Memory allocation failed for enemy_positions[%d]\n", enemy_count);
-                        // Освобождение уже выделенной памяти перед выходом
-                        for (int i = 0; i < enemy_count; i++)
-                        {
-                            free(enemy_positions[i]);
-                        }
-                        free(enemy_positions);
-                        return;
-                    }
-                    enemy_positions[enemy_count][0] = x;
-                    enemy_positions[enemy_count][1] = y;
-                    enemy_count++;
-                }
-            }
-        }
-        data->enemies_updated = 0; // Сбрасываем флаг обновления врагов
-    }
+	if (DEBUG)
+		printf("Number of enemies: %d\n", enemy_count);
 
-    if (DEBUG)
-        printf("Number of enemies: %d\n", enemy_count);
+	for (int i = 0; i < enemy_count; i++)
+	{
+		int ex = enemy_positions[i][0];
+		int ey = enemy_positions[i][1];
+		move_enemy_random(data, ex, ey);
+	}
 
-    for (int i = 0; i < enemy_count; i++)
-    {
-        int ex = enemy_positions[i][0];
-        int ey = enemy_positions[i][1];
-        move_enemy_random(data, ex, ey);
-    }
+	// Освобождение памяти после использования
+	for (int i = 0; i < enemy_count; i++)
+	{
+		free(enemy_positions[i]);
+	}
+	free(enemy_positions);
 
-    if (DEBUG)
-        printf("Exiting move_enemies\n");
+	if (DEBUG)
+		printf("Exiting move_enemies\n");
 }
 
 int key_hook(int keycode, t_data *data)
@@ -316,7 +325,7 @@ int game_loop(t_data *data)
 	return (0);
 }
 
-int	close_game(t_data *data)
+int close_game(t_data *data)
 {
 	end_game(data, "Игра закрыта");
 	return (0);
@@ -337,6 +346,7 @@ void game_start(char **map)
 	data.moves = 0;
 	data.player_frame = 0;
 	data.game_over = 0;  // Инициализация флага game_over
+	data.enemies_updated = 1; // Инициализация флага обновления врагов
 	draw_map(&data);
 	mlx_key_hook(data.win, key_hook, &data);
 	mlx_hook(data.win, 17, 0, close_game, &data);

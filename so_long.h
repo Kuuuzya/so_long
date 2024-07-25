@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 13:17:54 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:59:44 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 #include <math.h>
 
 #define BUFFER_SIZE 42
-#define MAX_WIDTH 33
-#define MAX_HEIGHT 17
+#define MAX_WIDTH 32
+#define MAX_HEIGHT 16
 #define TILE_SIZE 64
 #define ENEMY_SPEED 500000
 #define ANIMATION_SPEED 200000
@@ -47,10 +47,20 @@ typedef struct s_data {
 	int		enemies_updated;
 } t_data;
 
+typedef struct	s_flood_fill
+{
+	int	*visited;
+	int	width;
+	int	height;
+	int	*reachable_c;
+	int	*reachable_e;
+}	t_flood_fill;
+
 void	check_file(int fd);
 int		check_map(char	**map);
-void	get_map_size(char **map, int *width, int *height);
+
 int		check_path_availability(char **map);
+void	free_map(char **map);
 void	game_start(char **map);
 
 //libft functions and ft_printf
@@ -61,6 +71,12 @@ int		ft_strlen(const char *s);
 int		ft_putchar(char c);
 int		ft_putstr(char *s);
 int		ft_printnumber(int n);
+//check path utils
+int		*init_visited(int width, int height);
+void	count_items(char **map, int *total_c, int *total_e);
+void	find_starting_point(char **map, int *x, int *y);
+void	flood_fill(char **map, int x, int y, t_flood_fill *ff);
+void	get_map_size(char **map, int *width, int *height);
 //get next line utils
 char	*get_next_line(int fd);
 char	*ft_strchr(const char *s, int c);

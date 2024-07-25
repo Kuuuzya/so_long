@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:30:36 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 02:24:32 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:52:05 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ static int	ft_printstring(char *s)
 	return (count);
 }
 
-
-int ft_printnumber(int n)
+int	ft_printnumber(int n)
 {
 	if (n < 0)
 	{
