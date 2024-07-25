@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:35:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 11:38:42 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:37:26 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	check_extension(char *filename)
 	if (!extension || ft_strcmp(extension, ".ber") != 0)
 	{
 		ft_printf("%s", "Error\nInvalid file extension\n");
+		system("leaks so_long");
 		exit(1);
 	}
 }
@@ -33,6 +34,7 @@ char	**copy_old_lines(char **map, int size)
 	if (!new_map)
 	{
 		perror("Error\nFailed to allocate memory");
+		system("leaks so_long");
 		exit(1);
 	}
 	i = 0;
@@ -82,7 +84,7 @@ void	print_map(char **map)
 	}
 }
 
-int	main(int argc, char **argv)
+int	tmain(int argc, char **argv)
 {
 	int		fd;
 	char	**map;
@@ -90,6 +92,7 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 	{
 		ft_printf("%s", "Error\nWrong number of arguments. Use ./so_long map_name.ber\n");
+		system("leaks so_long");
 		exit(1);
 	}
 	check_extension(argv[1]);
@@ -97,6 +100,7 @@ int	main(int argc, char **argv)
 	if (fd < 0)
 	{
 		ft_printf("%s", "Error\nFailed to open file\n");
+		system("leaks so_long");
 		exit(1);
 	}
 	map = read_file_into_array(fd);
@@ -104,8 +108,16 @@ int	main(int argc, char **argv)
 	if (check_map(map) == 1)
 		{
 		ft_printf("%s", "Map is OK\n");
-		system("leaks so_long");
+		// system("leaks so_long");
 		game_start(map);
 		}
+	return (0);
+}
+
+
+int main(int argc, char **argv)
+{
+	tmain(argc, argv);
+	system("leaks so_long");
 	return (0);
 }

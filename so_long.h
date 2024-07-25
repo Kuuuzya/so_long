@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 11:44:17 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:01:01 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 # include <mlx.h>
 #include <math.h>
 
-#define BUFFER_SIZE 10
-#define MAX_WIDTH 23
-#define MAX_HEIGHT 15
+#define BUFFER_SIZE 42
+#define MAX_WIDTH 33
+#define MAX_HEIGHT 17
 #define TILE_SIZE 64
 #define ENEMY_SPEED 500000
 #define ANIMATION_SPEED 200000 
@@ -42,6 +42,7 @@ typedef struct s_data {
 	void	*wall_img;
 	void	*floor_img;
 	int		player_frame;
+	int		game_over;
 } t_data;
 
 void	check_file(int fd);

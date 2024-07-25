@@ -6,15 +6,10 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 19:31:49 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 11:44:40 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:08:09 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
-
-#include <stdlib.h>
-#include <unistd.h>
-#include "mlx.h"
 #include "so_long.h"
 
 int	load_textures(t_data *data)
@@ -70,13 +65,8 @@ void	draw_map(t_data *data)
 		}
 		y++;
 	}
-	// Выводим слово "Moves: "
-	mlx_string_put(data->mlx, data->win, 10, 10, 0xFFFFFF, "Moves: ");
-	
-	// Преобразуем количество ходов в строку и выводим
-	int move_len = data->moves;
-	ft_printnumber(move_len);
-	mlx_string_put(data->mlx, data->win, 70, 10, 0xFFFFFF, move_str);
+	sprintf(move_str, "Moves: %d", data->moves);
+	mlx_string_put(data->mlx, data->win, 10, 10, 0xFFFFFF, move_str);
 }
 
 int	find_player(t_data *data, int *x, int *y)
@@ -127,6 +117,7 @@ void	end_game(t_data *data, const char *message)
 {
 	ft_printf("%s\n", message);
 	mlx_destroy_window(data->mlx, data->win);
+	system("leaks so_long");
 	exit(0);
 }
 
@@ -141,6 +132,11 @@ void	move_player(t_data *data, int new_x, int new_y)
 	int y;
 
 	find_player(data, &x, &y);
+
+	// Проверка границ карты
+	if (new_x < 0 || new_y < 0 || new_x >= data->width / TILE_SIZE || new_y >= data->height / TILE_SIZE)
+		return;
+
 	if (data->map[new_y][new_x] != '1' && data->map[new_y][new_x] != 'E')
 	{
 		if (data->map[new_y][new_x] == 'C')
@@ -189,11 +185,12 @@ void move_enemy_random(t_data *data, int ex, int ey)
 		int new_y = valid_directions[random_index][1];
 
 		if (data->map[new_y][new_x] == 'P')
-			end_game(data, "Вы проиграли");
-
-		// Перемещаем врага
-		data->map[new_y][new_x] = 'X';
-		data->map[ey][ex] = '0';
+			data->game_over = 1;  // Устанавливаем флаг game_over
+		else
+		{
+			data->map[new_y][new_x] = 'X';
+			data->map[ey][ex] = '0';
+		}
 	}
 }
 
@@ -203,6 +200,7 @@ void move_enemies(t_data *data)
 	int enemy_positions[data->height * data->width][2];
 	int enemy_count = 0;
 
+	ft_printf("Moving enemies...\n");
 	for (y = 0; y < data->height / TILE_SIZE; y++)
 	{
 		for (x = 0; x < data->width / TILE_SIZE; x++)
@@ -216,15 +214,20 @@ void move_enemies(t_data *data)
 		}
 	}
 
+	ft_printf("Found %d enemies\n", enemy_count);
+
 	for (int i = 0; i < enemy_count; i++)
 	{
 		int ex = enemy_positions[i][0];
 		int ey = enemy_positions[i][1];
 		move_enemy_random(data, ex, ey);
 	}
+
+	if (data->game_over)
+		end_game(data, "Вы проиграли");
 }
 
-int	key_hook(int keycode, t_data *data)
+int key_hook(int keycode, t_data *data)
 {
 	int x;
 	int y;
@@ -242,19 +245,14 @@ int	key_hook(int keycode, t_data *data)
 			move_player(data, x, y + 1);
 		else if (keycode == 2 || keycode == 124)
 			move_player(data, x + 1, y);
+
 		move_enemies(data); // Двигаем врагов при каждом движении игрока
 	}
 	draw_map(data);
 	return (0);
 }
 
-int	close_game(t_data *data)
-{
-	end_game(data, "Игра закончена!");
-	return (0);
-}
-
-int	game_loop(t_data *data)
+int game_loop(t_data *data)
 {
 	static int player_animation_counter = 0;
 
@@ -269,7 +267,13 @@ int	game_loop(t_data *data)
 	return (0);
 }
 
-void	game_start(char **map)
+int	close_game(t_data *data)
+{
+	end_game(data, "Игра закрыта");
+	return (0);
+}
+
+void game_start(char **map)
 {
 	t_data data;
 
@@ -283,6 +287,7 @@ void	game_start(char **map)
 	data.map = map;
 	data.moves = 0;
 	data.player_frame = 0;
+	data.game_over = 0;  // Инициализация флага game_over
 	draw_map(&data);
 	mlx_key_hook(data.win, key_hook, &data);
 	mlx_hook(data.win, 17, 0, close_game, &data);
