@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:35:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 16:34:22 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:16:02 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int main(int argc, char **argv) {
     int fd;
     char **map;
     int map_size;
+    t_data data;
 
     if (argc != 2) {
         printf("%s", "Error\nWrong number of arguments. Use ./so_long map_name.ber\n");
@@ -125,11 +126,13 @@ int main(int argc, char **argv) {
     if (check_map(map) == 1) {
         printf("%s", "Map is OK\n");
         print_map(map);
-        game_start(map);
+        data.map = map; // Инициализация карты в структуре данных
+        game_start(&data); // Передача структуры данных в game_start
     } else {
         printf("%s", "Error\nInvalid map\n");
     }
+    // Освобождение карты в случае неудачи
     if (map) 
-		free_map(map); 
+        free_map(map); 
     return 0;
 }

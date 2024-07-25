@@ -6,12 +6,12 @@
 #    By: skuznets <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/21 15:51:49 by skuznets          #+#    #+#              #
-#    Updated: 2024/07/25 15:24:36 by skuznets         ###   ########.fr        #
+#    Updated: 2024/07/25 19:12:19 by skuznets         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 SRCS = so_long.c ft_printf.c ft_utils.c get_next_line.c get_next_line_utils.c \
 check_map.c handle_errors.c game.c check_path.c check_path_utils.c 
 OBJS = $(SRCS:.c=.o)

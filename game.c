@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 19:31:49 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 15:26:10 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:16:56 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,26 +115,27 @@ int check_win(t_data *data)
 
 void end_game(t_data *data, const char *message)
 {
-	ft_printf("%s\n", message);
-	// Освобождение ресурсов
-	if (data->wall_img)
-		mlx_destroy_image(data->mlx, data->wall_img);
-	if (data->floor_img)
-		mlx_destroy_image(data->mlx, data->floor_img);
-	if (data->player_img[0])
-		mlx_destroy_image(data->mlx, data->player_img[0]);
-	if (data->player_img[1])
-		mlx_destroy_image(data->mlx, data->player_img[1]);
-	if (data->exit_img)
-		mlx_destroy_image(data->mlx, data->exit_img);
-	if (data->collectible_img)
-		mlx_destroy_image(data->mlx, data->collectible_img);
-	if (data->enemy_img)
-		mlx_destroy_image(data->mlx, data->enemy_img);
-	if (data->win)
-		mlx_destroy_window(data->mlx, data->win);
-	system("leaks so_long");
-	exit(0);
+    ft_printf("%s\n", message);
+    // Освобождение ресурсов
+    if (data->wall_img)
+        mlx_destroy_image(data->mlx, data->wall_img);
+    if (data->floor_img)
+        mlx_destroy_image(data->mlx, data->floor_img);
+    if (data->player_img[0])
+        mlx_destroy_image(data->mlx, data->player_img[0]);
+    if (data->player_img[1])
+        mlx_destroy_image(data->mlx, data->player_img[1]);
+    if (data->exit_img)
+        mlx_destroy_image(data->mlx, data->exit_img);
+    if (data->collectible_img)
+        mlx_destroy_image(data->mlx, data->collectible_img);
+    if (data->enemy_img)
+        mlx_destroy_image(data->mlx, data->enemy_img);
+    if (data->win)
+        mlx_destroy_window(data->mlx, data->win);
+    if (data->map)
+        free_map(data->map); // Освобождение памяти для карты
+    exit(0);
 }
 
 void animate_player(t_data *data)
@@ -331,25 +332,22 @@ int close_game(t_data *data)
 	return (0);
 }
 
-void game_start(char **map)
+void game_start(t_data *data)
 {
-	t_data data;
-
-	get_map_size(map, &data.width, &data.height);
-	data.height *= TILE_SIZE;
-	data.width *= TILE_SIZE;
-	data.mlx = mlx_init();
-	data.win = mlx_new_window(data.mlx, data.width, data.height, "The Elon Game");
-	if (load_textures(&data) == 0)
-		end_game(&data, "Ошибка загрузки текстур");
-	data.map = map;
-	data.moves = 0;
-	data.player_frame = 0;
-	data.game_over = 0;  // Инициализация флага game_over
-	data.enemies_updated = 1; // Инициализация флага обновления врагов
-	draw_map(&data);
-	mlx_key_hook(data.win, key_hook, &data);
-	mlx_hook(data.win, 17, 0, close_game, &data);
-	mlx_loop_hook(data.mlx, game_loop, &data);
-	mlx_loop(data.mlx);
+    get_map_size(data->map, &data->width, &data->height);
+    data->height *= TILE_SIZE;
+    data->width *= TILE_SIZE;
+    data->mlx = mlx_init();
+    data->win = mlx_new_window(data->mlx, data->width, data->height, "The Elon Game");
+    if (load_textures(data) == 0)
+        end_game(data, "Ошибка загрузки текстур");
+    data->moves = 0;
+    data->player_frame = 0;
+    data->game_over = 0;  // Инициализация флага game_over
+    data->enemies_updated = 1; // Инициализация флага обновления врагов
+    draw_map(data);
+    mlx_key_hook(data->win, key_hook, data);
+    mlx_hook(data->win, 17, 0, close_game, data);
+    mlx_loop_hook(data->mlx, game_loop, data);
+    mlx_loop(data->mlx);
 }

@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 15:04:13 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:16:37 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int		check_map_size(char **map);
 int		check_walls(char **map);
 int		check_path_availability(char	**map, int	result);
 void	free_map(char **map);
-void	game_start(char **map);
+void	game_start(t_data *data);
 
 //libft functions and ft_printf
 int		ft_printf(const char *format, ...);
