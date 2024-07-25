@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 19:31:49 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 13:08:09 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:17:32 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,34 +126,45 @@ void	animate_player(t_data *data)
 	data->player_frame = (data->player_frame + 1) % 2;
 }
 
-void	move_player(t_data *data, int new_x, int new_y)
+void move_player(t_data *data, int new_x, int new_y)
 {
-	int x;
-	int y;
+    int x;
+    int y;
 
-	find_player(data, &x, &y);
+    if (DEBUG)
+        printf("Entering move_player\n");
 
-	// Проверка границ карты
-	if (new_x < 0 || new_y < 0 || new_x >= data->width / TILE_SIZE || new_y >= data->height / TILE_SIZE)
-		return;
+    find_player(data, &x, &y);
 
-	if (data->map[new_y][new_x] != '1' && data->map[new_y][new_x] != 'E')
-	{
-		if (data->map[new_y][new_x] == 'C')
-			data->map[new_y][new_x] = '0';
-		else if (data->map[new_y][new_x] == 'X')
-			end_game(data, "Вы проиграли");
+    if (DEBUG)
+    {
+        printf("Player position: (%d, %d)\n", x, y);
+        printf("New position: (%d, %d)\n", new_x, new_y);
+    }
 
-		data->map[y][x] = '0';
-		data->map[new_y][new_x] = 'P';
-		data->moves++;
-		ft_printf("Number of moves: %d\n", data->moves);
-		animate_player(data);
-	}
-	else if (data->map[new_y][new_x] == 'E' && check_win(data))
-	{
-		end_game(data, "Вы выиграли!");
-	}
+    if (data->map[new_y][new_x] != '1' && data->map[new_y][new_x] != 'E')
+    {
+        if (data->map[new_y][new_x] == 'C')
+            data->map[new_y][new_x] = '0';
+        else if (data->map[new_y][new_x] == 'X')
+            end_game(data, "Вы проиграли");
+
+        data->map[y][x] = '0';
+        data->map[new_y][new_x] = 'P';
+        data->moves++;
+
+        if (DEBUG)
+            printf("Number of moves: %d\n", data->moves);
+
+        animate_player(data);
+    }
+    else if (data->map[new_y][new_x] == 'E' && check_win(data))
+    {
+        end_game(data, "Вы выиграли!");
+    }
+
+    if (DEBUG)
+        printf("Exiting move_player\n");
 }
 
 void move_enemy_random(t_data *data, int ex, int ey)
@@ -196,35 +207,73 @@ void move_enemy_random(t_data *data, int ex, int ey)
 
 void move_enemies(t_data *data)
 {
-	int x, y;
-	int enemy_positions[data->height * data->width][2];
-	int enemy_count = 0;
+    int x, y;
+    int **enemy_positions = NULL;
+    int enemy_count = 0;
 
-	ft_printf("Moving enemies...\n");
-	for (y = 0; y < data->height / TILE_SIZE; y++)
-	{
-		for (x = 0; x < data->width / TILE_SIZE; x++)
-		{
-			if (data->map[y][x] == 'X')
-			{
-				enemy_positions[enemy_count][0] = x;
-				enemy_positions[enemy_count][1] = y;
-				enemy_count++;
-			}
-		}
-	}
+    if (DEBUG)
+        printf("Entering move_enemies\n");
 
-	ft_printf("Found %d enemies\n", enemy_count);
+    // Проверяем, изменилось ли положение врагов
+    if (data->enemies_updated)
+    {
+        // Динамическое выделение памяти для массива позиций врагов
+        if (enemy_positions != NULL)
+        {
+            for (int i = 0; i < enemy_count; i++)
+            {
+                free(enemy_positions[i]);
+            }
+            free(enemy_positions);
+        }
 
-	for (int i = 0; i < enemy_count; i++)
-	{
-		int ex = enemy_positions[i][0];
-		int ey = enemy_positions[i][1];
-		move_enemy_random(data, ex, ey);
-	}
+        enemy_positions = (int **)malloc(data->height * data->width * sizeof(int *));
+        if (!enemy_positions)
+        {
+            printf("Memory allocation failed for enemy_positions\n");
+            return;
+        }
 
-	if (data->game_over)
-		end_game(data, "Вы проиграли");
+        enemy_count = 0;
+        for (y = 0; y < data->height / TILE_SIZE; y++)
+        {
+            for (x = 0; x < data->width / TILE_SIZE; x++)
+            {
+                if (data->map[y][x] == 'X')
+                {
+                    enemy_positions[enemy_count] = (int *)malloc(2 * sizeof(int));
+                    if (!enemy_positions[enemy_count])
+                    {
+                        printf("Memory allocation failed for enemy_positions[%d]\n", enemy_count);
+                        // Освобождение уже выделенной памяти перед выходом
+                        for (int i = 0; i < enemy_count; i++)
+                        {
+                            free(enemy_positions[i]);
+                        }
+                        free(enemy_positions);
+                        return;
+                    }
+                    enemy_positions[enemy_count][0] = x;
+                    enemy_positions[enemy_count][1] = y;
+                    enemy_count++;
+                }
+            }
+        }
+        data->enemies_updated = 0; // Сбрасываем флаг обновления врагов
+    }
+
+    if (DEBUG)
+        printf("Number of enemies: %d\n", enemy_count);
+
+    for (int i = 0; i < enemy_count; i++)
+    {
+        int ex = enemy_positions[i][0];
+        int ey = enemy_positions[i][1];
+        move_enemy_random(data, ex, ey);
+    }
+
+    if (DEBUG)
+        printf("Exiting move_enemies\n");
 }
 
 int key_hook(int keycode, t_data *data)

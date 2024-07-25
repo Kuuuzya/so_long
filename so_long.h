@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 13:01:01 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:17:54 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 #define MAX_HEIGHT 17
 #define TILE_SIZE 64
 #define ENEMY_SPEED 500000
-#define ANIMATION_SPEED 200000 
+#define ANIMATION_SPEED 200000
+#define DEBUG 0
 
 typedef struct s_data {
 	void	*mlx;
@@ -43,6 +44,7 @@ typedef struct s_data {
 	void	*floor_img;
 	int		player_frame;
 	int		game_over;
+	int		enemies_updated;
 } t_data;
 
 void	check_file(int fd);
