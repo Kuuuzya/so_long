@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 19:16:37 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/25 21:13:02 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@
 # include <mlx.h>
 #include <math.h>
 
-#define BUFFER_SIZE 42
+#define BUFFER_SIZE 1024
 #define MAX_WIDTH 32
 #define MAX_HEIGHT 16
 #define TILE_SIZE 64
 #define ENEMY_SPEED 500000
 #define ANIMATION_SPEED 200000
-#define DEBUG 0
+#define DEBUG 1
 
 typedef struct s_data {
 	void	*mlx;
