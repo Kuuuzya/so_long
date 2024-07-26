@@ -6,11 +6,11 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 19:50:31 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 20:20:45 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:17:01 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 char *ft_read(int fd, char *buf, char *str)
 {

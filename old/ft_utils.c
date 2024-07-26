@@ -5,36 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/26 17:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/26 18:05:08 by skuznets         ###   ########.fr       */
+/*   Created: 2024/07/21 16:30:22 by skuznets          #+#    #+#             */
+/*   Updated: 2024/07/25 15:03:58 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-void ft_putstr(const char *s)
-{
-	int i;
-
-	i = 0;
-	while (s[i])
-	{
-		write(1, &s[i], 1);
-		i++;
-	}
-}
-void ft_putnbr(int n)
-{
-	char *s = "0123456789";
-	if (n < 0)
-	{
-		write(1, "-", 1);
-		n = -n;
-	}
-	if (n >= 10)
-		ft_putnbr(n / 10);
-	write(1, &s[n % 10], 1);
-}
 
 char	*ft_strrchr(const char *s, int c)
 {
@@ -60,4 +36,39 @@ int	ft_strcmp(const char *s1, const char *s2)
 		s2++;
 	}
 	return ((unsigned char)*s1 - (unsigned char)*s2);
+}
+
+int	ft_putchar(char c)
+{
+	write(1, &c, 1);
+	return (1);
+}
+
+int	ft_putstr(char *s)
+{
+	int	count;
+
+	count = 0;
+	if (s == NULL)
+		return (0);
+	while (*s)
+	{
+		write(1, s++, 1);
+		count++;
+	}
+	return (count);
+}
+
+int ft_strcpy(char *dst, const char *src)
+{
+	int i;
+
+	i = 0;
+	while (src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (i);
 }

@@ -6,36 +6,15 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 13:38:12 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 16:33:27 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:21:05 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-//void free_map(char **map)
-//{
-//    int i;
-
-//    if (!map)
-//    {
-//        printf("free_map: map is NULL\n");
-//        return;
-//    }
-        
-//    i = 0;
-//    while (map[i])
-//    {
-//        printf("free_map: freeing map[%d] at address %p\n", i, (void *)map[i]);
-//        free(map[i]);
-//        i++;
-//    }
-//    printf("free_map: freeing map at address %p\n", (void *)map);
-//    free(map);
-//}
-
 static int handle_map_error(const char *message)
 {
-    ft_printf("%s", message);
+    ft_putstr(message);
     return (0);
 }
 

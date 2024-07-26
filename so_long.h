@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 21:13:02 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:29:05 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,18 @@
 # include <string.h>
 # include <fcntl.h>
 # include <mlx.h>
-#include <math.h>
+# include <math.h>
 
-#define BUFFER_SIZE 1024
-#define MAX_WIDTH 32
-#define MAX_HEIGHT 16
-#define TILE_SIZE 64
-#define ENEMY_SPEED 500000
-#define ANIMATION_SPEED 200000
-#define DEBUG 1
+# define BUFFER_SIZE 1024
+# define MAX_WIDTH 32
+# define MAX_HEIGHT 16
+# define TILE_SIZE 64
+# define ENEMY_SPEED 500000
+# define ANIMATION_SPEED 200000
+# define DEBUG 1
 
-typedef struct s_data {
+typedef struct s_data
+{
 	void	*mlx;
 	void	*win;
 	int		width;
@@ -43,37 +44,46 @@ typedef struct s_data {
 	void	*wall_img;
 	void	*floor_img;
 	int		player_frame;
-	int		game_over;
-	int		enemies_updated;
-} t_data;
+}	t_data;
 
-typedef struct	s_flood_fill
+typedef struct s_flood_fill
 {
 	int	*visited;
 	int	width;
 	int	height;
 	int	*reachable_c;
 	int	*reachable_e;
+	int	initial_c_count;
+	int	initial_e_count;
 }	t_flood_fill;
 
-void	check_file(int	fd);
-int		check_map(char	**map);
-int		check_map_content(char	**map);
+typedef struct s_valid_dirs
+{
+	int	directions[4][2];
+	int	valid_directions[4][2];
+	int	valid_count;
+}	t_valid_dirs;
+
+typedef struct s_position
+{
+	int	x;
+	int	y;
+}	t_position;
+
+void	check_file(int fd);
+int		check_map(char **map);
+int		check_map_content(char **map);
 int		check_map_size(char **map);
 int		check_walls(char **map);
-int		check_path_availability(char	**map, int	result);
+int		check_path_availability(char	**map, int result);
 void	free_map(char **map);
 void	game_start(t_data *data);
 
-//libft functions and ft_printf
-int		ft_printf(const char *format, ...);
+//libft functions
+void	ft_putstr(const char *s);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strrchr(const char *s, int c);
 int		ft_strlen(const char *s);
-int		ft_putchar(char c);
-int		ft_putstr(char *s);
-int		ft_printnumber(int n);
-int		ft_strcpy(char *dst, const char *src);
 //check path utils
 int		*init_visited(int width, int height);
 void	count_items(char **map, int *total_c, int *total_e);
@@ -85,4 +95,8 @@ char	*get_next_line(int fd);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_substr(char *s, int start, int len);
+//game
+int		load_textures(t_data *data);
+void	end_game(t_data *data, const char *message);
+void	move_enemy_random(t_data *data, int ex, int ey);
 #endif

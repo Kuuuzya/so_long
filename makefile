@@ -6,14 +6,16 @@
 #    By: skuznets <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/21 15:51:49 by skuznets          #+#    #+#              #
-#    Updated: 2024/07/25 21:19:39 by skuznets         ###   ########.fr        #
+#    Updated: 2024/07/26 18:02:44 by skuznets         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
-SRCS = so_long.c ft_printf.c ft_utils.c get_next_line.c get_next_line_utils.c \
-check_map.c handle_errors.c game.c check_path.c check_path_utils.c 
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
+SRCS = so_long.c ft_utils.c \
+gnl/get_next_line.c gnl/get_next_line_utils.c \
+check_map.c handle_errors.c game.c check_path.c check_path_utils.c \
+game/random_movements.c game/load_and_end.c
 OBJS = $(SRCS:.c=.o)
 NAME = so_long
 MLX = -lm -lmlx -framework OpenGL -framework AppKit

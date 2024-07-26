@@ -6,11 +6,11 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 19:51:59 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 20:08:45 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:17:07 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -42,7 +42,7 @@ char *ft_strjoin(char *s1, char *s2)
         free(s1);
         return NULL;
     }
-    str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1); // Удален лишний +1
+    str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
     if (!str)
 	{
         free(s1);  // Утечка исправлена

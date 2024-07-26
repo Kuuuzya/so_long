@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:01:34 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 16:30:57 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:30:32 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ t_flood_fill	init_flood_fill(int width, int height)
 		*ff.reachable_c = 0;
 	if (ff.reachable_e)
 		*ff.reachable_e = 0;
+	ff.initial_c_count = 0;
+	ff.initial_e_count = 0;
 	return (ff);
 }
 
@@ -57,6 +59,7 @@ int	initialize_and_check_start_point(char **map, int **x, int **y)
 	return (1);
 }
 
+
 int	check_path_availability(char **map, int result)
 {
 	int				*x;
@@ -67,7 +70,6 @@ int	check_path_availability(char **map, int result)
 
 	if (!initialize_and_check_start_point(map, &x, &y))
 		return (0);
-	printf("check_path_availability: checking map path availability\n");
 	get_map_size(map, &width, &height);
 	ff = init_flood_fill(width, height);
 	if (!ff.visited || !ff.reachable_c || !ff.reachable_e)
@@ -75,10 +77,9 @@ int	check_path_availability(char **map, int result)
 		free_resources(x, y, &ff);
 		return (0);
 	}
-	count_items(map, ff.reachable_c, ff.reachable_e);
+	count_items(map, &ff.initial_c_count, &ff.initial_e_count);
 	flood_fill(map, *x, *y, &ff);
-	result = (*ff.reachable_c == *ff.reachable_c && \
-*ff.reachable_e == *ff.reachable_e);
+	result = (*ff.reachable_c == ff.initial_c_count && *ff.reachable_e == ff.initial_e_count);
 	free_resources(x, y, &ff);
 	return (result);
 }
