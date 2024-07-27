@@ -6,11 +6,11 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 13:40:13 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/25 14:04:53 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/27 09:57:34 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 void	get_map_size(char **map, int *width, int *height)
 {

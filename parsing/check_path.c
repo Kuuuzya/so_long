@@ -6,11 +6,11 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:01:34 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/26 18:30:32 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/27 09:57:28 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 t_flood_fill	init_flood_fill(int width, int height)
 {
@@ -59,7 +59,6 @@ int	initialize_and_check_start_point(char **map, int **x, int **y)
 	return (1);
 }
 
-
 int	check_path_availability(char **map, int result)
 {
 	int				*x;
@@ -79,7 +78,8 @@ int	check_path_availability(char **map, int result)
 	}
 	count_items(map, &ff.initial_c_count, &ff.initial_e_count);
 	flood_fill(map, *x, *y, &ff);
-	result = (*ff.reachable_c == ff.initial_c_count && *ff.reachable_e == ff.initial_e_count);
+	result = (*ff.reachable_c == ff.initial_c_count && \
+	*ff.reachable_e == ff.initial_e_count);
 	free_resources(x, y, &ff);
 	return (result);
 }

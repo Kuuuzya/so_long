@@ -1,15 +1,14 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   enemy_move.c									   :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: skuznets <marvin@42.fr>					+#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2024/07/26 17:42:28 by skuznets		  #+#	#+#			 */
-/*   Updated: 2024/07/26 17:44:31 by skuznets		 ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   random_movements.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/27 09:34:34 by skuznets          #+#    #+#             */
+/*   Updated: 2024/07/27 11:19:59 by skuznets         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../so_long.h"
 
@@ -59,7 +58,7 @@ static void	move_enemy_to_new_position(t_data *data, \
 t_position new_pos, t_position old_pos)
 {
 	if (data->map[new_pos.y][new_pos.x] == 'P')
-		end_game(data, "You loose!!!");
+		end_game(data, "You loose!");
 	else
 	{
 		data->map[new_pos.y][new_pos.x] = 'X';
@@ -75,7 +74,6 @@ void	move_enemy_random(t_data *data, int ex, int ey)
 	t_position		old_pos;
 
 	get_valid_directions(data, ex, ey, &valid_dirs);
-
 	if (valid_dirs.valid_count > 0)
 	{
 		random_index = rand() % valid_dirs.valid_count;

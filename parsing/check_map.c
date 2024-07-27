@@ -6,11 +6,11 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:11:00 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/26 18:14:39 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/27 09:57:31 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
 int	check_map_size(char **map)
 {
@@ -31,12 +31,13 @@ int	check_map_size(char **map)
 	i = 1;
 	while (map[i])
 	{
-		if (ft_strlen(map[i]) != width) 
+		if (ft_strlen(map[i]) != width)
 			return (0);
 		i++;
 	}
 	return (1);
 }
+
 static int	count_char_in_map(char **map, char c)
 {
 	int		count;
@@ -56,6 +57,7 @@ static int	count_char_in_map(char **map, char c)
 	}
 	return (count);
 }
+
 int	check_map_content(char **map)
 {
 	int	exit_c;
@@ -74,12 +76,13 @@ int	check_walls(char **map)
 	int	j;
 
 	i = 0;
-	while (map[i]) 
+	while (map[i])
 	{
 		j = 0;
 		while (map[i][j])
 		{
-			if (((i == 0 || !map[i + 1]) && map[i][j] != '1') || ((j == 0 || !map[i][j + 1]) && map[i][j] != '1'))
+			if (((i == 0 || !map[i + 1]) && map[i][j] != '1') || \
+			((j == 0 || !map[i][j + 1]) && map[i][j] != '1'))
 				return (0);
 			j++;
 		}
@@ -87,4 +90,3 @@ int	check_walls(char **map)
 	}
 	return (1);
 }
-

@@ -6,15 +6,15 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 17:59:53 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/26 18:05:08 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/27 10:45:14 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../so_long.h"
 
-void ft_putstr(const char *s)
+void	ft_putstr(const char *s)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (s[i])
@@ -23,17 +23,47 @@ void ft_putstr(const char *s)
 		i++;
 	}
 }
-void ft_putnbr(int n)
+
+static size_t	get_digits(int n)
 {
-	char *s = "0123456789";
+	size_t	i;
+
+	if (n == 0)
+		return (1);
+	i = 0;
+	while (n != 0)
+	{
+		n /= 10;
+		i++;
+	}
+	return (i);
+}
+
+char	*ft_itoa(int n)
+{
+	char		*str_num;
+	size_t		digits;
+	long int	num;
+
+	num = n;
+	digits = get_digits(n);
 	if (n < 0)
 	{
-		write(1, "-", 1);
-		n = -n;
+		num *= -1;
+		digits++;
 	}
-	if (n >= 10)
-		ft_putnbr(n / 10);
-	write(1, &s[n % 10], 1);
+	str_num = (char *)malloc(sizeof(char) * (digits + 1));
+	if (!str_num)
+		return (NULL);
+	*(str_num + digits) = 0;
+	while (digits--)
+	{
+		*(str_num + digits) = num % 10 + '0';
+		num = num / 10;
+	}
+	if (n < 0)
+		*(str_num + 0) = '-';
+	return (str_num);
 }
 
 char	*ft_strrchr(const char *s, int c)
