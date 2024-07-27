@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:11:00 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/27 09:57:31 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/27 13:24:51 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,27 @@ int	check_map_size(char **map)
 	return (1);
 }
 
+static int	check_invalid_chars(char **map)
+{
+	int		i;
+	char	*ptr;
+
+	while (*map)
+	{
+		ptr = *map;
+		i = 0;
+		while (ptr[i])
+		{
+			if (ptr[i] != 'E' && ptr[i] != 'C' && ptr[i] != 'X' && \
+			ptr[i] != 'P' && ptr[i] != '1' && ptr[i] != '0')
+				return (1);
+			i++;
+		}
+		map++;
+	}
+	return (0);
+}
+
 static int	count_char_in_map(char **map, char c)
 {
 	int		count;
@@ -64,6 +85,8 @@ int	check_map_content(char **map)
 	int	collectible_c;
 	int	start_position_c;
 
+	if (check_invalid_chars(map))
+		return (0);
 	exit_c = count_char_in_map(map, 'E');
 	collectible_c = count_char_in_map(map, 'C');
 	start_position_c = count_char_in_map(map, 'P');

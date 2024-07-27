@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 17:39:27 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/27 12:14:32 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/27 13:37:13 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	end_game(t_data *data, const char *message)
 	ft_putstr(message);
 	ft_putstr("\n");
 	free_sources(data);
-	//system("leaks so_long");
 	exit(0);
 }
 

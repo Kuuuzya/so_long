@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 10:19:03 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/27 11:19:49 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/27 13:42:08 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,21 @@ void	animate_player(t_data *data)
 	data->player_frame = (data->player_frame + 1) % 2;
 }
 
+void	print_moves(t_data *data)
+{
+	char	*str;
+
+	ft_putstr("Moves: ");
+	str = ft_itoa(data->moves);
+	ft_putstr(str);
+	free(str);
+	ft_putstr("\n");
+}
+
 void	move_player(t_data *data, int new_x, int new_y)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 
 	find_player(data, &x, &y);
 	if (data->map[new_y][new_x] != '1' && data->map[new_y][new_x] != 'E')
@@ -57,12 +68,12 @@ void	move_player(t_data *data, int new_x, int new_y)
 		data->map[new_y][new_x] = 'P';
 		data->moves++;
 		animate_player(data);
-		ft_putstr("Moves: ");
-		ft_putstr(ft_itoa(data->moves));
-		ft_putstr("\n");
+		print_moves(data);
 	}
 	else if (data->map[new_y][new_x] == 'E' && check_win(data))
 	{
+		data->moves++;
+		print_moves(data);
 		end_game(data, "You win!");
 	}
 }
