@@ -6,7 +6,7 @@
 /*   By: skuznets <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 13:38:52 by skuznets          #+#    #+#             */
-/*   Updated: 2024/07/27 13:39:06 by skuznets         ###   ########.fr       */
+/*   Updated: 2024/07/27 13:51:23 by skuznets         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static void	check_extension(char *filename)
 	if (!extension || ft_strcmp(extension, ".ber") != 0)
 	{
 		ft_putstr("Error\nInvalid file extension\n");
-		system("leaks so_long");
 		exit (1);
 	}
 }
